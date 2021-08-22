@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+<title>
+    Open Go Stop
+</title>
+
+<head>
+<style>
+
+img.border {
+  border: 10px solid #555;
+}
+</style>
+</head>
+
+<body>
+    Hand0<br>
+    <img src="hand0.png" id="hand0_image" />
+    <br>
+    Taken0<br>
+    <img src="taken0.png" id="taken0_image" />
+    <br>
+    Table<br>
+    <img class="border" src="table.png" id="table_image" />
+    <img src="top_card.png" id="top_image" />
+    <br>
+
+    Taken1<br>
+    <img src="taken1.png" id="taken1_image" />
+    <br>
+
+    <script>
+        var hand0Image = new Image();
+        // var hand1Image = new Image();
+        var taken0Image = new Image();
+        var taken1Image = new Image();
+        var tableImage = new Image();
+        var topImage = new Image();
+        hand0Image.src = "hand0.png";
+        hand1Image.src = "hand1.png";
+        taken0Image.src = "taken0.png";
+        taken1Image.src = "taken1.png";
+        tableImage.src = "table.png";
+        topImage.src = "top_card.png";
+
+        updateImage();
+        function updateImage() {
+            // console.log("hello");
+            if (hand0Image.complete) {
+                document.getElementById("hand0_image").src = hand0Image.src;
+                hand0Image = new Image();
+                hand0Image.src = "hand0.png?" + new Date().getTime();
+            }
+            // if (hand1Image.complete) {
+            //     document.getElementById("hand1_image").src = hand1Image.src;
+            //     hand1Image = new Image();
+            //     hand1Image.src = "hand1.png?" + new Date().getTime();
+            // }
+            if (taken0Image.complete) {
+                document.getElementById("taken0_image").src = taken0Image.src;
+                taken0Image = new Image();
+                taken0Image.src = "taken0.png?" + new Date().getTime();
+            }
+            if (taken1Image.complete) {
+                document.getElementById("taken1_image").src = taken1Image.src;
+                taken1Image = new Image();
+                taken1Image.src = "taken1.png?" + new Date().getTime();
+            }
+            if (tableImage.complete) {
+                document.getElementById("table_image").src = tableImage.src;
+                tableImage = new Image();
+                tableImage.src = "table.png?" + new Date().getTime();
+            }
+            if (topImage.complete) {
+                document.getElementById("top_image").src = topImage.src;
+                topImage = new Image();
+                topImage.src = "top_card.png?" + new Date().getTime();
+            }
+            console(".");
+            setTimeout(updateImage, 1000);
+        }
+    </script>
+
+</body>
+
+</html>

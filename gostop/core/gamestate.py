@@ -1,9 +1,14 @@
 import copy
 import random
+import logging
+from PIL import Image
+from .build_a_image import get_concat_h, add_number
+
 
 from .hand import TableCards, TakenCards, Hand
 from .deck import Deck
 
+logging.basicConfig(level=logging.INFO)
 
 class GameStateException(Exception):
     pass
@@ -56,10 +61,14 @@ class GameState(object):
 
     def __str__(self):
         out = 'Table: {0}\n'.format(str(self.table_cards))
+        create_image(self.table_cards, 'html/table.png', overlap=0)
         for i in range(0, self.number_of_players):
             out += 'Hand: {0}\n'.format(str(self.player_hands[i]))
             out += 'Taken cards: {0}\n'.format(str(self.taken_cards[i]))
             out += 'Score: {0}\n'.format(self.taken_cards[i].score)
+            create_image(self.player_hands[i], f'html/hand{i}.png', number=True)
+            create_image(self.taken_cards[i], f'html/taken{i}.png')
+        
         return out
 
     @staticmethod
@@ -169,6 +178,8 @@ class GameStatePlay(GameState):
 
         state.paired_cards = action
         state.top_card = state.deck.pop()
+        print(state.top_card.month, state.top_card.order_in_month)
+        create_image([state.top_card], 'html/top_card.png')
         return state
 
 
@@ -333,3 +344,21 @@ class GameStateEnd(GameState):
         """Returns the successor state after the current agent takes `action`.
         """
         return None
+
+def create_image(card_list, image_name="html/gostop.png", number=False, overlap=50):
+    images = []
+    for i, card in enumerate(card_list):
+        img = Image.open(f"images/{card.month-1:x}{card.order_in_month}.png")
+        if number:
+            img = add_number(img, i) 
+        images.append(img)
+    
+    if len(images) == 0:
+        logging.warning("Empty image")
+        dst_image = Image.new('RGB', (1,1))
+    else:
+        dst_image = images.pop(0)
+        for i in images:
+            dst_image = get_concat_h(dst_image, i, overlap)
+
+    dst_image.save(image_name)
