@@ -1,3 +1,5 @@
+"""card"""
+
 from .utils import _
 
 
@@ -8,8 +10,11 @@ class Card(object):
         self.group = group
 
     def __repr__(self):
-        return "{__class__.__name__}(name='{name}', month={month}, group={group})" \
-            .format(__class__=self.__class__, **self.__dict__)
+        return (
+            "{__class__.__name__}(name='{name}', month={month}, group={group})".format(
+                __class__=self.__class__, **self.__dict__
+            )
+        )
 
     def __str__(self):
         return self.name
@@ -18,8 +23,7 @@ class Card(object):
         if other is None:
             return False
         elif isinstance(other, self.__class__):
-            return self.month == other.month and \
-                   self.group == other.group
+            return self.month == other.month and self.group == other.group
         return NotImplemented
 
     def __lt__(self, other):
@@ -54,67 +58,105 @@ class Group(object):
     JUNK_2 = 5
 
 
-CRANE = Card(_(u'Pine and Crane'), Month.JAN, Group.BRIGHT)
-PINE_RED_POEM = Card(_(u'Pine and Red Poem Ribbon'), Month.JAN, Group.RIBBON)
-PINE = Card(_(u'Pine'), Month.JAN, Group.JUNK)
+CRANE = Card(_("Pine and Crane"), Month.JAN, Group.BRIGHT)
+PINE_RED_POEM = Card(_("Pine and Red Poem Ribbon"), Month.JAN, Group.RIBBON)
+PINE = Card(_("Pine"), Month.JAN, Group.JUNK)
 
-BUSH_WARBLER = Card(_(u'Plum Blossom and Bush Warbler'), Month.FEB, Group.ANIMAL)
-PLUM_RED_POEM = Card(_(u'Plum Blossom and Red Poem Ribbon'), Month.FEB, Group.RIBBON)
-PLUM = Card(_(u'Plum Blossom'), Month.FEB, Group.JUNK)
+BUSH_WARBLER = Card(_("Plum Blossom and Bush Warbler"), Month.FEB, Group.ANIMAL)
+PLUM_RED_POEM = Card(_("Plum Blossom and Red Poem Ribbon"), Month.FEB, Group.RIBBON)
+PLUM = Card(_("Plum Blossom"), Month.FEB, Group.JUNK)
 
-CURTAIN = Card(_(u'Cherry Blossom and Curtain'), Month.MAR, Group.BRIGHT)
-CHERRY_RED_POEM = Card(_(u'Cherry Blossom and Red Poem Ribbon'), Month.MAR, Group.RIBBON)
-CHERRY = Card(_(u'Cherry Blossom'), Month.MAR, Group.JUNK)
+CURTAIN = Card(_("Cherry Blossom and Curtain"), Month.MAR, Group.BRIGHT)
+CHERRY_RED_POEM = Card(_("Cherry Blossom and Red Poem Ribbon"), Month.MAR, Group.RIBBON)
+CHERRY = Card(_("Cherry Blossom"), Month.MAR, Group.JUNK)
 
-CUCKOO = Card(_(u'Wisteria and Cuckoo'), Month.APR, Group.ANIMAL)
-WISTERIA_RED = Card(_(u'Wisteria and Red Ribbon'), Month.APR, Group.RIBBON)
-WISTERIA = Card(_(u'Wisteria'), Month.APR, Group.JUNK)
+CUCKOO = Card(_("Wisteria and Cuckoo"), Month.APR, Group.ANIMAL)
+WISTERIA_RED = Card(_("Wisteria and Red Ribbon"), Month.APR, Group.RIBBON)
+WISTERIA = Card(_("Wisteria"), Month.APR, Group.JUNK)
 
-BRIDGE = Card(_(u'Iris and Bridge'), Month.MAY, Group.ANIMAL)
-IRIS_RED = Card(_(u'Iris and Red Ribbon'), Month.MAY, Group.RIBBON)
-IRIS = Card(_(u'Iris'), Month.MAY, Group.JUNK)
+BRIDGE = Card(_("Iris and Bridge"), Month.MAY, Group.ANIMAL)
+IRIS_RED = Card(_("Iris and Red Ribbon"), Month.MAY, Group.RIBBON)
+IRIS = Card(_("Iris"), Month.MAY, Group.JUNK)
 
-BUTTERFLY = Card(_(u'Peony and Butterfly'), Month.JUN, Group.ANIMAL)
-PEONY_BLUE_POEM = Card(_(u'Peony and Blue Poem Ribbon'), Month.JUN, Group.RIBBON)
-PEONY = Card(_(u'Peony'), Month.JUN, Group.JUNK)
+BUTTERFLY = Card(_("Peony and Butterfly"), Month.JUN, Group.ANIMAL)
+PEONY_BLUE_POEM = Card(_("Peony and Blue Poem Ribbon"), Month.JUN, Group.RIBBON)
+PEONY = Card(_("Peony"), Month.JUN, Group.JUNK)
 
-BOAR = Card(_(u'Bush Clover and Boar'), Month.JUL, Group.ANIMAL)
-BUSH_CLOVER_RED = Card(_(u'Bush Clover and Red Ribbon'), Month.JUL, Group.RIBBON)
-BUSH_CLOVER = Card(_(u'Bush Clover'), Month.JUL, Group.JUNK)
+BOAR = Card(_("Bush Clover and Boar"), Month.JUL, Group.ANIMAL)
+BUSH_CLOVER_RED = Card(_("Bush Clover and Red Ribbon"), Month.JUL, Group.RIBBON)
+BUSH_CLOVER = Card(_("Bush Clover"), Month.JUL, Group.JUNK)
 
-MOON = Card(_(u'Pampas Grass and Moon'), Month.AUG, Group.BRIGHT)
-GEESE = Card(_(u'Pampas Grass and Geese'), Month.AUG, Group.ANIMAL)
-PAMPAS_GRASS = Card(_(u'Pampas Grass'), Month.AUG, Group.JUNK)
+MOON = Card(_("Pampas Grass and Moon"), Month.AUG, Group.BRIGHT)
+GEESE = Card(_("Pampas Grass and Geese"), Month.AUG, Group.ANIMAL)
+PAMPAS_GRASS = Card(_("Pampas Grass"), Month.AUG, Group.JUNK)
 
-CUP = Card(_(u'Chrysanthemum and Cup'), Month.SEP, (Group.ANIMAL, Group.JUNK_2))
-CHRYSANTHEMUM_BLUE_PEOM = Card(_(u'Chrysanthemum and Blue Poem Ribbon'), Month.SEP, Group.RIBBON)
-CHRYSANTHEMUM = Card(_(u'Chrysanthemum'), Month.SEP, Group.JUNK)
+CUP = Card(_("Chrysanthemum and Cup"), Month.SEP, (Group.ANIMAL, Group.JUNK_2))
+CHRYSANTHEMUM_BLUE_PEOM = Card(
+    _("Chrysanthemum and Blue Poem Ribbon"), Month.SEP, Group.RIBBON
+)
+CHRYSANTHEMUM = Card(_("Chrysanthemum"), Month.SEP, Group.JUNK)
 
-DEER = Card(_(u'Maple and Deer'), Month.OCT, Group.ANIMAL)
-MAPLE_BLUE_POEM = Card(_(u'Maple and Blue Poem Ribbon'), Month.OCT, Group.RIBBON)
-MAPLE = Card(_(u'Maple'), Month.OCT, Group.JUNK)
+DEER = Card(_("Maple and Deer"), Month.OCT, Group.ANIMAL)
+MAPLE_BLUE_POEM = Card(_("Maple and Blue Poem Ribbon"), Month.OCT, Group.RIBBON)
+MAPLE = Card(_("Maple"), Month.OCT, Group.JUNK)
 
-PHOENIX = Card(_(u'Paulownia and Phoenix'), Month.NOV, Group.BRIGHT)
-PAULOWNIA = Card(_(u'Paulownia'), Month.NOV, Group.JUNK)
-PAULOWNIA_2 = Card(_(u'Paulownia 2'), Month.NOV, Group.JUNK_2)
+PHOENIX = Card(_("Paulownia and Phoenix"), Month.NOV, Group.BRIGHT)
+PAULOWNIA = Card(_("Paulownia"), Month.NOV, Group.JUNK)
+PAULOWNIA_2 = Card(_("Paulownia 2"), Month.NOV, Group.JUNK_2)
 
-RAIN = Card(_(u'Willow and Rain'), Month.DEC, Group.BRIGHT)
-SWALLOW = Card(_(u'Willow and Swallow'), Month.DEC, Group.ANIMAL)
-WILLOW_RED = Card(_(u'Willow and Red Ribbon'), Month.DEC, Group.RIBBON)
-WILLOW_2 = Card(_(u'Willow'), Month.DEC, Group.JUNK_2)
+RAIN = Card(_("Willow and Rain"), Month.DEC, Group.BRIGHT)
+SWALLOW = Card(_("Willow and Swallow"), Month.DEC, Group.ANIMAL)
+WILLOW_RED = Card(_("Willow and Red Ribbon"), Month.DEC, Group.RIBBON)
+WILLOW_2 = Card(_("Willow"), Month.DEC, Group.JUNK_2)
 
 
 ALL_CARDS = (
-    CRANE, PINE_RED_POEM, PINE, PINE,
-    BUSH_WARBLER, PLUM_RED_POEM, PLUM, PLUM,
-    CURTAIN, CHERRY_RED_POEM, CHERRY, CHERRY,
-    CUCKOO, WISTERIA_RED, WISTERIA, WISTERIA,
-    BRIDGE, IRIS_RED, IRIS, IRIS,
-    BUTTERFLY, PEONY_BLUE_POEM, PEONY, PEONY,
-    BOAR, BUSH_CLOVER_RED, BUSH_CLOVER, BUSH_CLOVER,
-    MOON, GEESE, PAMPAS_GRASS, PAMPAS_GRASS,
-    CUP, CHRYSANTHEMUM_BLUE_PEOM, CHRYSANTHEMUM, CHRYSANTHEMUM,
-    DEER, MAPLE_BLUE_POEM, MAPLE, MAPLE,
-    PHOENIX, PAULOWNIA_2, PAULOWNIA, PAULOWNIA,
-    RAIN, SWALLOW, WILLOW_RED, WILLOW_2
+    CRANE,
+    PINE_RED_POEM,
+    PINE,
+    PINE,
+    BUSH_WARBLER,
+    PLUM_RED_POEM,
+    PLUM,
+    PLUM,
+    CURTAIN,
+    CHERRY_RED_POEM,
+    CHERRY,
+    CHERRY,
+    CUCKOO,
+    WISTERIA_RED,
+    WISTERIA,
+    WISTERIA,
+    BRIDGE,
+    IRIS_RED,
+    IRIS,
+    IRIS,
+    BUTTERFLY,
+    PEONY_BLUE_POEM,
+    PEONY,
+    PEONY,
+    BOAR,
+    BUSH_CLOVER_RED,
+    BUSH_CLOVER,
+    BUSH_CLOVER,
+    MOON,
+    GEESE,
+    PAMPAS_GRASS,
+    PAMPAS_GRASS,
+    CUP,
+    CHRYSANTHEMUM_BLUE_PEOM,
+    CHRYSANTHEMUM,
+    CHRYSANTHEMUM,
+    DEER,
+    MAPLE_BLUE_POEM,
+    MAPLE,
+    MAPLE,
+    PHOENIX,
+    PAULOWNIA_2,
+    PAULOWNIA,
+    PAULOWNIA,
+    RAIN,
+    SWALLOW,
+    WILLOW_RED,
+    WILLOW_2,
 )

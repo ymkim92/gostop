@@ -1,18 +1,19 @@
-import copy
-import random
+"""game state"""
 
-from .hand import TableCards, TakenCards, Hand
 from .deck import Deck
+from .hand import Hand, TableCards, TakenCards
 
 
+# TODO split this into game state and game action
 class GameStateException(Exception):
-    pass
+    """game state exception"""
 
 
-class GameState(object):
+class GameState:
     """The GameState specifies the complete state of the game, including the
     player's hands, cards on the table and scoring.
     """
+
     def __init__(self, prev_state=None):
         self.number_of_players = 2
         self.winner = None
@@ -21,23 +22,17 @@ class GameState(object):
             self.current_player = prev_state.current_player
             self.deck = Deck(cards=prev_state.deck)
             self.table_cards = TableCards(*prev_state.table_cards)
-            self.player_hands = \
-                [Hand(*cards) for cards in prev_state.player_hands]
-            self.taken_cards = \
-                [TakenCards(*cards) for cards in prev_state.taken_cards]
+            self.player_hands = [Hand(*cards) for cards in prev_state.player_hands]
+            self.taken_cards = [TakenCards(*cards) for cards in prev_state.taken_cards]
         else:
             self.current_player = 0
             self.deck = Deck()
             self.table_cards = TableCards()
-            self.player_hands = \
-            [Hand() for i in range(0, self.number_of_players)]
-            self.taken_cards = \
-                [TakenCards() for i in range(0, self.number_of_players)]
+            self.player_hands = [Hand() for i in range(0, self.number_of_players)]
+            self.taken_cards = [TakenCards() for i in range(0, self.number_of_players)]
 
     def __eq__(self, other):
-        if other is None:
-            return False
-        if not self.current_player == other.current_player:
+        if other is None or not self.current_player == other.current_player:
             return False
         if not self.deck == other.deck:
             return False
@@ -51,70 +46,59 @@ class GameState(object):
         return True
 
     def __hash__(self):
-        return hash((self.current_player, self.deck, self.table_cards,
-                     zip(self.player_hands), zip(self.taken_cards)))
+        return hash(
+            (
+                self.current_player,
+                self.deck,
+                self.table_cards,
+                zip(self.player_hands),
+                zip(self.taken_cards),
+            )
+        )
 
     def __str__(self):
-        out = 'Table: {0}\n'.format(str(self.table_cards))
+        out = f"Table: {str(self.table_cards)}\n"
         for i in range(0, self.number_of_players):
-            out += 'Hand: {0}\n'.format(str(self.player_hands[i]))
-            out += 'Taken cards: {0}\n'.format(str(self.taken_cards[i]))
-            out += 'Score: {0}\n'.format(self.taken_cards[i].score)
+            out += f"Hand: {str(self.player_hands[i])}\n"
+            out += f"Taken cards: {str(self.taken_cards[i])}\n"
+            out += f"Score: {self.taken_cards[i].score}\n"
         return out
 
     @staticmethod
-    def new_game(number_of_players=2):
+    def new_game():
         """Reset the game state for the beginning of a new game, and deal
         cards to each player.
         """
         state = GameStatePlay()
         state.deck.shuffle()
 
-        for i in range(0, 2):
-            for p in range(0, state.number_of_players):
-                state.player_hands[p] += state.deck.pop()
-                state.player_hands[p] += state.deck.pop()
-                state.player_hands[p] += state.deck.pop()
-                state.player_hands[p] += state.deck.pop()
-                state.player_hands[p] += state.deck.pop()
+        for _ in range(0, 2):
+            for _p in range(0, state.number_of_players):
+                state.player_hands[_p] += state.deck.pop()
+                state.player_hands[_p] += state.deck.pop()
+                state.player_hands[_p] += state.deck.pop()
+                state.player_hands[_p] += state.deck.pop()
+                state.player_hands[_p] += state.deck.pop()
             state.table_cards += state.deck.pop()
             state.table_cards += state.deck.pop()
             state.table_cards += state.deck.pop()
             state.table_cards += state.deck.pop()
-
-        return state
-
-    def copy_and_randomise(self, observer):
-        """Returns a deep copy of the game state, randomising any information
-        which is not visible to the specified observing player.
-        """
-        state = self.__class__(prev_state=self)
-
-        # The observer can see his own hand, the cards on the table, and any
-        # cards captured by other players
-        seen_cards = [card for card in state.player_hands[observer]] + \
-                     [card for card in state.table_cards] + \
-                     [card for tc in state.taken_cards for card in tc]
-        unseen_cards = [card for card in Deck()
-                        if card not in seen_cards or seen_cards.remove(card)]
-
-        # Randomly deal the unseen cards to the other players
-        random.shuffle(unseen_cards)
-        for player in range(0, self.number_of_players):
-            if player != observer:
-                num_cards = len(state.player_hands[player])
-                state.player_hands[player] = Hand(*unseen_cards[:num_cards])
-                unseen_cards = unseen_cards[num_cards:]
 
         return state
 
     def get_result(self, player):
+        """get result"""
         if self.winner == player:
             return 1
-        elif self.winner is not None:
+
+        if self.winner is not None:
             return 0
-        elif self.get_possible_actions() == []:
+
+        # no winner here
+        if self.get_possible_actions() == []:
+            # no possible actions
             return 0.5
+
         return 0
 
     def get_possible_actions(self):
@@ -122,8 +106,7 @@ class GameState(object):
         raise NotImplementedError()
 
     def generate_successor(self, action):
-        """Returns the successor state after the current agent takes `action`.
-        """
+        """Returns the successor state after the current agent takes `action`."""
         raise NotImplementedError()
 
 
@@ -152,8 +135,7 @@ class GameStatePlay(GameState):
         return possible_actions
 
     def generate_successor(self, action):
-        """Returns the successor state after the current agent takes `action`.
-        """
+        """Returns the successor state after the current agent takes `action`."""
         state = GameStateCapture(prev_state=self)
 
         if action is not None:
@@ -172,85 +154,19 @@ class GameStatePlay(GameState):
         return state
 
 
-class GameAction(object):
-    pass
-
-
-class GameActionPlayCard(GameAction):
-    def __init__(self, card, paired_card=None):
-        super(GameActionPlayCard, self).__init__()
-        self.card = card
-        self.paired_card = paired_card
-
-    def __eq__(self, other):
-        if other is None:
-            return False
-        else:
-            return self.card == other.card and \
-                   self.paired_card == other.paired_card
-
-    def __str__(self):
-        if self.paired_card:
-            out = '{}, {}'.format(str(self.card), str(self.paired_card))
-        else:
-            out = '{}'.format(str(self.card))
-        return out
-
-
-class GameActionGo(GameAction):
-    def __eq__(self, other):
-        if isinstance(other, GameActionGo):
-            return True
-        else:
-            return False
-
-    def __str__(self):
-        return 'Go'
-
-
-class GameActionStop(GameAction):
-    def __eq__(self, other):
-        if isinstance(other, GameActionStop):
-            return True
-        else:
-            return False
-
-    def __str__(self):
-        return 'Stop'
-
-
 class GameStateCapture(GameState):
+    """game state: capture"""
+
+    def __init__(self, prev_state=None):
+        super().__init__(prev_state)
+        self.paired_cards = None
+        self.top_card = None
+
     def __str__(self):
         out = super().__str__()
-        out += 'Top card: {0}\n'.format(self.top_card)
-        out += 'Paired cards: {0}\n'.format(self.paired_cards)
+        out += f"Top card: {0}\n".format(self.top_card)
+        out += f"Paired cards: {0}\n".format(self.paired_cards)
         return out
-
-    def copy_and_randomise(self, observer):
-        """Returns a deep copy of the game state, randomising any information
-        which is not visible to the specified observing player.
-        """
-        state = self.__class__(prev_state=self)
-        state.top_card = self.top_card
-        state.paired_cards = self.paired_cards
-
-        # The observer can see his own hand, the cards on the table, and any
-        # cards captured by other players
-        seen_cards = [card for card in state.player_hands[observer]] + \
-                     [card for card in state.table_cards] + \
-                     [card for tc in state.taken_cards for card in tc]
-        unseen_cards = [card for card in Deck()
-                        if card not in seen_cards or seen_cards.remove(card)]
-
-        # Randomly deal the unseen cards to the other players
-        random.shuffle(unseen_cards)
-        for player in range(0, self.number_of_players):
-            if player != observer:
-                num_cards = len(state.player_hands[player])
-                state.player_hands[player] = Hand(*unseen_cards[:num_cards])
-                unseen_cards = unseen_cards[num_cards:]
-
-        return state
 
     def get_possible_actions(self):
         """Returns a list of possible actions for the current agent."""
@@ -264,8 +180,7 @@ class GameStateCapture(GameState):
         return possible_actions
 
     def generate_successor(self, action):
-        """Returns the successor state after the current agent takes `action`.
-        """
+        """Returns the successor state after the current agent takes `action`."""
         state = GameStatePlay(prev_state=self)
 
         # Capture from last turn
@@ -300,24 +215,25 @@ class GameStateCapture(GameState):
             state = GameStateGoStop(prev_state=state)
         else:
             # Next player's turn
-            state.current_player = (state.current_player+1) % state.number_of_players
+            state.current_player = (state.current_player + 1) % state.number_of_players
         return state
 
 
 class GameStateGoStop(GameState):
+    """game state: gostop"""
+
     def get_possible_actions(self):
         """Returns a list of possible actions for the current agent."""
         if len(self.deck) > 0:
             return [GameActionGo(), GameActionStop()]
-        else:
-            return [GameActionStop()]
+
+        return [GameActionStop()]
 
     def generate_successor(self, action):
-        """Returns the successor state after the current agent takes `action`.
-        """
-        if type(action) == GameActionGo:
+        """Returns the successor state after the current agent takes `action`."""
+        if isinstance(action) == GameActionGo:
             state = GameStatePlay(prev_state=self)
-            state.current_player = (state.current_player+1) % state.number_of_players
+            state.current_player = (state.current_player + 1) % state.number_of_players
         else:
             state = GameStateEnd(prev_state=self)
             state.winner = self.current_player
@@ -330,6 +246,58 @@ class GameStateEnd(GameState):
         return []
 
     def generate_successor(self, action):
-        """Returns the successor state after the current agent takes `action`.
-        """
+        """Returns the successor state after the current agent takes `action`."""
         return None
+
+
+# pylint: disable=too-few-public-methods
+class GameAction:
+    """game action"""
+
+
+class GameActionPlayCard(GameAction):
+    """game action: play card"""
+
+    def __init__(self, card, paired_card=None):
+        super().__init__()
+        self.card = card
+        self.paired_card = paired_card
+
+    def __eq__(self, other):
+        if other is None:
+            return False
+
+        return self.card == other.card and self.paired_card == other.paired_card
+
+    def __str__(self):
+        if self.paired_card:
+            out = f"{str(self.card)}, {str(self.paired_card)}"
+        else:
+            out = f"{str(self.card)}"
+        return out
+
+
+class GameActionGo(GameAction):
+    """game action: go"""
+
+    def __eq__(self, other):
+        if isinstance(other, GameActionGo):
+            return True
+
+        return False
+
+    def __str__(self):
+        return "Go"
+
+
+class GameActionStop(GameAction):
+    """game action: stop"""
+
+    def __eq__(self, other):
+        if isinstance(other, GameActionStop):
+            return True
+
+        return False
+
+    def __str__(self):
+        return "Stop"
