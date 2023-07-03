@@ -1,6 +1,6 @@
 import unittest
 
-from gostop.core.deck import Deck
+from src.gostop.deck import Deck
 
 
 class DeckTest(unittest.TestCase):

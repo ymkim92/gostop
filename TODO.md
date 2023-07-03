@@ -1,0 +1,1 @@
+- [ ] make it to be able to play by see the card images

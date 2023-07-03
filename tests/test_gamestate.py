@@ -2,9 +2,9 @@
 
 import unittest
 
-from gostop.core.card import CHERRY, CRANE, PINE, PINE_RED_POEM, PLUM
-from gostop.core.gamestate import GameActionPlayCard, GameStatePlay
-from gostop.core.hand import Hand, TableCards
+from src.gostop.card import CHERRY, CRANE, PINE, PINE_RED_POEM, PLUM
+from src.gostop.gamestate import GameActionPlayCard, GameStatePlay
+from src.gostop.hand import Hand, TableCards
 
 
 class GameStatePlayTest(unittest.TestCase):
