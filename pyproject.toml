@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gostop"
+version = "1.0.0"
+description = "Korean go-stop card game for 2 players"
+readme = "README.md"
+authors = [{ name = "Youngmin Kim", email = "ymkim92@gmail.com" }]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">=3.7"
+
+[project.scripts]
+gostop = "gostop.__main__:main"
