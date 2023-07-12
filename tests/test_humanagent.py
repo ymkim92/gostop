@@ -1,3 +1,4 @@
+"""test human agent"""
 import sys
 import unittest
 from io import StringIO
@@ -5,12 +6,14 @@ from io import StringIO
 try:
     import mock
 except ImportError:
-    import unittest.mock as mock
+    from unittest import mock
 
 from src.gostop.humanagent import HumanAgent
 
 
 class HumanAgentTest(unittest.TestCase):
+    """human agent test"""
+
     def setUp(self):
         self.stdout = sys.stdout
         sys.stdout = StringIO()
@@ -19,6 +22,7 @@ class HumanAgentTest(unittest.TestCase):
         sys.stdout = self.stdout
 
     def test_get_action(self):
+        """test get actions"""
         agent = HumanAgent("Test Agent")
         with mock.patch("src.gostop.humanagent.input", return_value="0"):
             self.assertEqual(

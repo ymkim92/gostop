@@ -1,2 +1,5 @@
-def _(s):
-    return s
+""" TODO why this? """
+
+
+def _(_s):
+    return _s

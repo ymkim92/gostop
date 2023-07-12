@@ -1,1 +1,3 @@
 - [ ] make it to be able to play by see the card images
+- [ ] add code linting script
+- [ ] remove linting error by code

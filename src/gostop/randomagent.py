@@ -1,3 +1,4 @@
+"""random agent"""
 import random
 
 from .agent import Agent

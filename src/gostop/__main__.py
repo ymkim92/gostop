@@ -1,11 +1,13 @@
+"""__main__.py"""
+
 import argparse
 import random
-import sys
 
 from gostop import GameState, HumanAgent, RandomAgent
 
 
 def main():
+    """main"""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
